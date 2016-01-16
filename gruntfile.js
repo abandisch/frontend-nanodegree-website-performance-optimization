@@ -4,12 +4,12 @@ module.exports = function(grunt) {
         uglify: {
             main: {
                 files: {
-                    'dist/js/perfmatters.min.js' : ['src/js/perfmatters.js']
+                    'dist/js/perfmatters.js' : ['src/js/perfmatters.js']
                 }
             },
             pizza: {
                 files: {
-                    'dist/views/js/main.min.js' : ['src/views/js/main.js']
+                    'dist/views/js/main.js' : ['src/views/js/main.js']
                 }
             }
         }, // uglify
@@ -20,8 +20,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'src/css',
                     src: ['*.css'],
-                    dest: 'dist/css',
-                    ext: '.min.css'
+                    dest: 'dist/css'
                 }]
             },
             pizza: {
@@ -29,8 +28,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'src/views/css',
                     src: ['*.css'],
-                    dest: 'dist/views/css',
-                    ext: '.min.css'
+                    dest: 'dist/views/css'
                 }]
             }
         }, // cssmin
