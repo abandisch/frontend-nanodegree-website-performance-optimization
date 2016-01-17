@@ -26,14 +26,16 @@ The following lists the changes that were done to the index.html page in order t
    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 ```
 
-2.Load 'Open Sans' font via javascript
+2.Load 'Open Sans' font via javascript (async)
 ```sh
-  <script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+  <script async src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
   <script>
+    window.onload(function() {
     WebFont.load({
       google: {
         families: ['Open Sans']
       }
+    });
     });
   </script>
 ```
@@ -48,15 +50,18 @@ The following lists the changes that were done to the index.html page in order t
 ```sh
   <!-- Load remaining non critical styles from style.css -->
   <script>
-    var cb = function() {
-      var l = document.createElement('link'); l.rel = 'stylesheet';
-      l.href = 'css/style.css';
-      var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(cb);
-    else window.addEventListener('load', cb);
+    window.onload(function() {
+      var cb = function() {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = 'css/style.css';
+        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+      };
+      var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+              webkitRequestAnimationFrame || msRequestAnimationFrame;
+      if (raf) raf(cb);
+      else window.addEventListener('load', cb);
+
+    });
   </script>
 ```
 
