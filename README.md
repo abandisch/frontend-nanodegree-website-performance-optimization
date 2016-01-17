@@ -12,7 +12,7 @@ To edit the source files, you'll need Grunt installed globally, then run under t
 ```sh
 $ npm install
 ```
-Then to watch for changes, run grunt from the command line:
+Then to watch for changes, run `grunt` from the command line:
 ```sh
 $ grunt
 ```
@@ -20,36 +20,42 @@ $ grunt
 ## Changes to "index.html"
 
 The following lists the changes that were done to the index.html page in order to achieve a PageSpeed score of above 90 for both mobile and desktop:
-1. Google fonts - Removed link tag and replaced 'Open Sans' with Arial:
+
+1.Google fonts - Removed link tag and replaced 'Open Sans' with Arial:
 ```sh
-   <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  -->
+   <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 ```
 ```sh
     body, button, input, select, textarea { font-family: 'Arial', sans-serif; color: #333; } 
 ```
-2. Added media="print" to print.css link tag to prevent render blocking on screen devices:
+
+2.Added media="print" to print.css link tag to prevent render blocking on screen devices:
 ```sh
 <link href="css/print.css" rel="stylesheet" media="print">
 ```
-3. Added "async" attribute to script tag for Google analytics script:
+
+3.Added "async" attribute to script tag for Google analytics script:
 ```sh
 <script async src="http://www.google-analytics.com/analytics.js"></script>
 ```
-4. Used image editing application to optimize the size of the profile image
+
+4.Used image editing application to optimize the size of the profile image
 ```sh
 <img src="img/profilepic.jpg" alt="Profile Image">
 ```
-6. Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
+
+5.Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
 ```sh
 <img alt="Project 4" style="width: 100px;" src="views/images/pizzeria_100x75.jpg">
 ```
-7. Added .htaccess to leverage browser caching and use compression
+
+6.Added .htaccess to leverage browser caching and use compression
 
 This .htaccess file was obtained from https://github.com/h5bp/server-configs-apache.
 
 *Note*: While it  depends on what the underlying web server is, as to which configuration file to use, I chose to use a .htaccess file as apache seems to be the most common web server.
 
-8. Minified CSS, JS and HTML and removed comments
+7.Minified CSS, JS and HTML and removed comments
 
 Used grunt's minification plugins to both minify and remove all comments from all the required CSS, javascript and HTML files.
 
