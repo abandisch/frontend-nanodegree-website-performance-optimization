@@ -450,11 +450,38 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
+
+    var pizzas = document.querySelectorAll(".randomPizzaContainer");
+
+    if (pizzas.length) {
+      var newWidth;
+      switch(size) {
+        case "1":
+          newWidth = 25;
+          break;
+        case "2":
+          newWidth = 33.3;
+          break;
+        case "3":
+          newWidth =  50;
+          break;
+        default:
+          console.log("bug in sizeSwitcher");
+      }
+
+      for (var i = 0; i < pizzas.length; i++) {
+        pizzas[i].style.width = newWidth + '%';
+      }
+    }
+
+    /*
+     * Original Code
     for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
       var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
       var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
       document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
+    */
   }
 
   changePizzaSizes(size);
@@ -502,10 +529,27 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  // Alex: Move document.body.scrollTop out of for loop and declare a variable for it
+  var items = document.querySelectorAll('.mover'),
+      scrollTop = (document.body.scrollTop / 1250),
+      basicLeft = [],
+      basicLeftCounter = 0,
+      i;
+
+  // Alex: basicLeft property repeats itself after the first 8 items, so just get the first 8 basicLeft values
+  for (i = 0; i < 8; i++) {
+    basicLeft[i] = items[i].basicLeft;
+  }
+
+  for (i = 0; i < items.length; i++) {
+    var phase = Math.sin(scrollTop + (i % 5));
+
+    // Alex: Set the left css style using the sin calculation and the value contained
+    // in the basicLeft array obtained in the previous for loop
+    items[i].style.left = basicLeft[basicLeftCounter] + 100 * phase + 'px';
+
+    // Alex: Update the counter for the basicLeft array
+    basicLeftCounter = (basicLeftCounter === 7 ? 0 : basicLeftCounter + 1);
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -525,7 +569,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  // ALEX: Reduce number of pizzas from 200 to 24 (i.e. 3 * 8)
+  for (var i = 0; i < 24; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";

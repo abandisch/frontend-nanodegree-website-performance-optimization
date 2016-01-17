@@ -6,13 +6,15 @@ module.exports = function(grunt) {
                 files: {
                     'dist/js/perfmatters.js' : ['src/js/perfmatters.js']
                 }
-            },
-            pizza: {
-                files: {
-                    'dist/views/js/main.js' : ['src/views/js/main.js']
-                }
             }
         }, // uglify
+
+        copy: {
+            pizza: {
+                src: 'src/views/js/main.js',
+                dest: 'dist/views/js/main.js',
+            }
+        }, // copy
 
         cssmin: {
             main: {
@@ -24,12 +26,13 @@ module.exports = function(grunt) {
                 }]
             },
             pizza: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/views/css',
-                    src: ['*.css'],
-                    dest: 'dist/views/css'
-                }]
+                options: {
+                    shorthandCompacting: false,
+                    roundingPrecision: -1,
+                },
+                files: {
+                    'dist/views/css/pizza-styles.css': ['src/views/css/style.css', 'src/views/css/bootstrap-grid.css']
+                }
             }
         }, // cssmin
 
@@ -94,15 +97,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Tasks
-    grunt.registerTask('default', ['uglify', 'cssmin', 'htmlmin', 'watch']);
+    grunt.registerTask('default', ['uglify', 'cssmin', 'htmlmin', 'copy', 'watch']);
     grunt.registerTask('processMainHTML', ['htmlmin:main']);
     grunt.registerTask('processMainJS', ['uglify:main']);
     grunt.registerTask('processMainCSS', ['cssmin:main']);
     grunt.registerTask('processPizzaHTML', ['htmlmin:pizza']);
-    grunt.registerTask('processPizzaJS', ['uglify:pizza']);
+    grunt.registerTask('processPizzaJS', ['copy:pizza']);
     grunt.registerTask('processPizzaCSS', ['cssmin:pizza']);
 
 }; // Wrapper function
