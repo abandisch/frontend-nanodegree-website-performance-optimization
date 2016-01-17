@@ -21,39 +21,70 @@ $ grunt
 
 The following lists the changes that were done to the index.html page in order to achieve a PageSpeed score of above 90 for both mobile and desktop:
 
-1.Google fonts - Removed link tag and replaced 'Open Sans' with Arial:
+1.Removed link google fond link tag
 ```sh
    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 ```
+
+2.Load 'Open Sans' font via javascript
 ```sh
-    body, button, input, select, textarea { font-family: 'Arial', sans-serif; color: #333; } 
+  <script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        families: ['Open Sans']
+      }
+    });
+  </script>
 ```
 
-2.Added media="print" to print.css link tag to prevent render blocking on screen devices:
+3.Inline critical CSS
+```sh
+  <!-- Extracted render blocking CSS and placed it inline (minified), rest of the non critical CSS is in style.css, which is loaded using javascript -->
+  <style>.hero,footer{border-top:1px solid #ccc}footer span,li p{font-style:italic}html{font-size:100%;overflow-y:scroll;-ms-text-size-adjust:100%;-webkit-text-size-adjust:none}body{margin:0;font-size:14px;line-height:1.61;font-weight:400;font-family:'Open Sans',sans-serif;color:#333;background:#fff}header p,strong{font-weight:700}a{color:#12C}ul{margin:1em 0;padding:0 0 0 20px}img{border:0;max-width:100%}.container,footer,header{max-width:45em;margin:0 auto}header{padding:0 .5em;color:#C90B0B}header img{border-radius:40px;float:left}header p{font-size:1.5em;padding-left:4em}header p span{font-size:.8em;font-weight:400}.hero{padding:2em;background-color:#f8f8f8;font-size:1.2em;border-bottom:1px solid #ccc}.content{padding:1em}.content li{list-style-type:none;font-size:1.1em}li img{float:left;padding-right:1em}li p{font-size:.9em}footer{padding:0 .5em}footer span{float:right}@media only screen and (max-width:480px){body{font-size:12px}header p{padding-left:4.5em}}</style>
+```
+ 
+4.Load remaining non-critical CSS via javascript
+```sh
+  <!-- Load remaining non critical styles from style.css -->
+  <script>
+    var cb = function() {
+      var l = document.createElement('link'); l.rel = 'stylesheet';
+      l.href = 'css/style.css';
+      var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+    };
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+            webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(cb);
+    else window.addEventListener('load', cb);
+  </script>
+```
+
+5.Added media="print" to print.css link tag to prevent render blocking on screen devices:
 ```sh
 <link href="css/print.css" rel="stylesheet" media="print">
 ```
 
-3.Added "async" attribute to script tag for Google analytics script:
+6.Added "async" attribute to script tag for Google analytics script:
 ```sh
 <script async src="http://www.google-analytics.com/analytics.js"></script>
 ```
 
-4.Used image editing application to optimize the size of the profile image
+7.Used image editing application to optimize the size of the profile image
 ```sh
 <img src="img/profilepic.jpg" alt="Profile Image">
 ```
 
-5.Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
+8.Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
 ```sh
 <img alt="Project 4" style="width: 100px;" src="views/images/pizzeria_100x75.jpg">
 ```
 
-6.Minified CSS, JS and HTML and removed comments
+9.Minified CSS, JS and HTML and removed comments
 
 Used grunt's minification plugins to both minify and remove all comments from all the required CSS, javascript and HTML files.
 
-6.Added .htaccess to leverage browser caching and use compression
+10.Added .htaccess to leverage browser caching and use compression
 
 This .htaccess file was obtained from https://github.com/h5bp/server-configs-apache.
 

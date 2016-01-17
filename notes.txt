@@ -1,0 +1,5 @@
+Index.html:
+
+- Optimised profile pic (img/profilepic.jpg) and pizzeria image (views/images/pizzeria_100x75.jpg)
+- Remove
+- Adds sample .htaccess from https://github.com/h5bp/server-configs-apache to address browser caching and resource compression
