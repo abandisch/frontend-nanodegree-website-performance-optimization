@@ -451,10 +451,12 @@ var resizePizzas = function(size) {
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
 
-    var pizzas = document.querySelectorAll(".randomPizzaContainer");
+    // Get all pizza elements
+    var pizzas = document.querySelectorAll(".randomPizzaContainer"),
+        newWidth;
 
     if (pizzas.length) {
-      var newWidth;
+      // Get the new width percentage
       switch(size) {
         case "1":
           newWidth = 25;
@@ -466,22 +468,15 @@ var resizePizzas = function(size) {
           newWidth =  50;
           break;
         default:
-          console.log("bug in sizeSwitcher");
+          console.log("Invalid size: " + size + ". Using default instead.");
+          newWidth = 33.3;
       }
 
+      // iterate through each pizza element and set the new width as a percentage
       for (var i = 0; i < pizzas.length; i++) {
         pizzas[i].style.width = newWidth + '%';
       }
     }
-
-    /*
-     * Original Code
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-    }
-    */
   }
 
   changePizzaSizes(size);
@@ -532,24 +527,15 @@ function updatePositions() {
   // Alex: Move document.body.scrollTop out of for loop and declare a variable for it
   var items = document.querySelectorAll('.mover'),
       scrollTop = (document.body.scrollTop / 1250),
-      basicLeft = [],
-      basicLeftCounter = 0,
-      i;
+      translateX, phase;
 
-  // Alex: basicLeft property repeats itself after the first 8 items, so just get the first 8 basicLeft values
-  for (i = 0; i < 8; i++) {
-    basicLeft[i] = items[i].basicLeft;
-  }
+  for (var i = 0; i < items.length; i++) {
+    phase = Math.sin(scrollTop + (i % 5));
+    translateX = basicLeftArray[i] + 100 * phase;
 
-  for (i = 0; i < items.length; i++) {
-    var phase = Math.sin(scrollTop + (i % 5));
-
-    // Alex: Set the left css style using the sin calculation and the value contained
-    // in the basicLeft array obtained in the previous for loop
-    items[i].style.left = basicLeft[basicLeftCounter] + 100 * phase + 'px';
-
-    // Alex: Update the counter for the basicLeft array
-    basicLeftCounter = (basicLeftCounter === 7 ? 0 : basicLeftCounter + 1);
+    // Alex: Using 'transform' instead of 'left' - according to csstriggers.com, 'transform' only affects
+    //       the Composite, this should help with the jank.
+    items[i].style.transform = "translatex(" + translateX + "px)";
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -565,20 +551,25 @@ function updatePositions() {
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
+// Alex: Used to store the basicLeft values of all the pizza elements
+var basicLeftArray = [];
+
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  // ALEX: Reduce number of pizzas from 200 to 24 (i.e. 3 * 8)
-  for (var i = 0; i < 24; i++) {
+  // ALEX: Reduce number of pizzas from 200 to 31. The most we can see on the screen at any given moment is 31 - I counted.
+  for (var i = 0; i < 31; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
+    elem.style.left = "100px";      // Alex: Using transform places the pizzas in the middle of the page, added this style to address that
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
+    basicLeftArray[i] = (i % cols) * s; // Alex: store basicLeft value in an array for looking up later in updatePositions
   }
   updatePositions();
 });
