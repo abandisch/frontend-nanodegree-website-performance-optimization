@@ -21,7 +21,7 @@ $ grunt
 
 The following lists the changes that were done to the index.html page in order to achieve a PageSpeed score of above 90 for both mobile and desktop:
 
-1. Google fonts - Removed link tag and replaced 'Open Sans' with Arial:
+1.Google fonts - Removed link tag and replaced 'Open Sans' with Arial:
 ```sh
    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 ```
@@ -29,31 +29,31 @@ The following lists the changes that were done to the index.html page in order t
     body, button, input, select, textarea { font-family: 'Arial', sans-serif; color: #333; } 
 ```
 
-2. Added media="print" to print.css link tag to prevent render blocking on screen devices:
+2.Added media="print" to print.css link tag to prevent render blocking on screen devices:
 ```sh
 <link href="css/print.css" rel="stylesheet" media="print">
 ```
 
-3. Added "async" attribute to script tag for Google analytics script:
+3.Added "async" attribute to script tag for Google analytics script:
 ```sh
 <script async src="http://www.google-analytics.com/analytics.js"></script>
 ```
 
-4. Used image editing application to optimize the size of the profile image
+4.Used image editing application to optimize the size of the profile image
 ```sh
 <img src="img/profilepic.jpg" alt="Profile Image">
 ```
 
-5. Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
+5.Optimized pizzeria.jpg and created smaller image called pizzeria_100x75.jpg to use with the index.html page
 ```sh
 <img alt="Project 4" style="width: 100px;" src="views/images/pizzeria_100x75.jpg">
 ```
 
-6. Minified CSS, JS and HTML and removed comments
+6.Minified CSS, JS and HTML and removed comments
 
 Used grunt's minification plugins to both minify and remove all comments from all the required CSS, javascript and HTML files.
 
-7. Added .htaccess to leverage browser caching and use compression
+7.Added .htaccess to leverage browser caching and use compression
 
 This .htaccess file was obtained from https://github.com/h5bp/server-configs-apache.
 
@@ -69,12 +69,12 @@ Although not part of the evaluation matrix, similar web performance changes were
 
 The following changes were completed, to achieve a consistent frame rate of 60fps when scrolling through the pizza.html page
 
-1. Added global array to store the basicLeft value of each of the pizza elements. This will allow the updatePositions() function later on to lookup these values from the array, rather than query the element itself.
+1.Added global array to store the basicLeft value of each of the pizza elements. This will allow the updatePositions() function later on to lookup these values from the array, rather than query the element itself.
 ```sh
 var basicLeftArray = [];
 ```
 
-2. Updated `DOMContentLoaded` anonymous function to:
+2.Updated `DOMContentLoaded` anonymous function to:
   
   * Reduced the number of generated pizzas from 200 to 31. This is the maximum number of pizzas that can be see on a full desktop screen - there is no need to create 200 of these pizzas
 ```sh
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
-3. Refactored updatePositions function as follows
+3.Refactored updatePositions function as follows
   
   * Moved `document.body.scrollTop` out of for loop so it doesn't need to be re-calculated for every pizza
 ```sh
@@ -161,7 +161,7 @@ function updatePositions() {
 }
 ```
 
-4. Added `will-change: transform;` to `.mover` class within `style.css`
+4.Added `will-change: transform;` to `.mover` class within `style.css`
 ```sh
   .mover {
     position: fixed;
@@ -170,7 +170,6 @@ function updatePositions() {
     will-change: transform;
   }
 ```  
-  
 
 ### Rezize pizzas in less than 5ms in pizza.html
 
@@ -207,3 +206,38 @@ var pizzas = document.querySelectorAll(".randomPizzaContainer")
       pizzas[i].style.width = newWidth + '%';
     }  
 ```  
+
+Full code for `changePizzaSizes()` function is as follows:
+```sh
+  // Iterates through pizza elements on the page and changes their widths
+  function changePizzaSizes(size) {
+
+    // Get all pizza elements
+    var pizzas = document.querySelectorAll(".randomPizzaContainer"),
+        newWidth;
+
+    if (pizzas.length) {
+      // Get the new width percentage
+      switch(size) {
+        case "1":
+          newWidth = 25;
+          break;
+        case "2":
+          newWidth = 33.3;
+          break;
+        case "3":
+          newWidth =  50;
+          break;
+        default:
+          console.log("Invalid size: " + size + ". Using default instead.");
+          newWidth = 33.3;
+      }
+
+      // iterate through each pizza element and set the new width as a percentage
+      for (var i = 0; i < pizzas.length; i++) {
+        pizzas[i].style.width = newWidth + '%';
+      }
+    }
+  }
+```
+
