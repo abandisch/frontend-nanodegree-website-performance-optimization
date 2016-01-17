@@ -107,12 +107,12 @@ var basicLeftArray = [];
 
 2.Updated `DOMContentLoaded` anonymous function to:
   
-  1.Reduced the number of generated pizzas from 200 to 31. This is the maximum number of pizzas that can be see on a full desktop screen - there is no need to create 200 of these pizzas
+  * Reduced the number of generated pizzas from 200 to 31. This is the maximum number of pizzas that can be see on a full desktop screen - there is no need to create 200 of these pizzas
 ```sh
 for (var i = 0; i < 31; i++) {
 ```
 
-  2.Added new `left` style of 100px, because `updatePositions()` now uses `transform` style, which for some reason places the pizzas starting in the middle of the screen
+  * Added new `left` style of 100px, because `updatePositions()` now uses `transform` style, which for some reason places the pizzas starting in the middle of the screen
 ```sh
 elem.style.left = "100px";
 ```
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 3.Refactored updatePositions function as follows
   
-  1.Moved `document.body.scrollTop` out of for loop so it doesn't need to be re-calculated for every pizza
+  * Moved `document.body.scrollTop` out of for loop so it doesn't need to be re-calculated for every pizza
 ```sh
   // Alex: Move document.body.scrollTop out of for loop and declare a variable for it
   var items = document.querySelectorAll('.mover'),
@@ -150,12 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
       translateX, phase;
 ```
 
-  2.Pizza element's basicLeft value is now obtained from the global array `basicLeftArray`
+  * Pizza element's basicLeft value is now obtained from the global array `basicLeftArray`
 ```sh  
   translateX = basicLeftArray[i] + 100 * phase;
 ```  
 
-  3.Used `transform` css style instead of `left` - according to csstriggers.com, `transform` only affects the Composite, whereas `left` affects Layout, Paint and Composite
+  * Used `transform` css style instead of `left` - according to csstriggers.com, `transform` only affects the Composite, whereas `left` affects Layout, Paint and Composite
 ```sh
   items[i].style.transform = "translatex(" + translateX + "px)";
 ```    
@@ -201,19 +201,18 @@ function updatePositions() {
     will-change: transform;
   }
 ```  
-  
 
 ### Rezize pizzas in less than 5ms in pizza.html
 
 To resize pizzas in less than 5ms in pizza.html, the following was completed
 
 1.Updated `changePizzaSizes()` function as follows
-  1.Moved `document.querySelectorAll(".randomPizzaContainer")` out of for loop, into it's own variable
+  * Moved `document.querySelectorAll(".randomPizzaContainer")` out of for loop, into it's own variable
 ```sh
 var pizzas = document.querySelectorAll(".randomPizzaContainer")  
 ```  
 
-  2.Do not call `determineDx` function anymore, instead use switch statement to get new width, used as a percentage
+  * Do not call `determineDx` function anymore, instead use switch statement to get new width, used as a percentage
 ```sh
   switch(size) {
     case "1":
@@ -231,10 +230,45 @@ var pizzas = document.querySelectorAll(".randomPizzaContainer")
   }   
 ```  
 
-  3.Update for loop to use new `pizzas` variable and set width as a percentage
+  * Update for loop to use new `pizzas` variable and set width as a percentage
 ```sh
     // iterate through each pizza element and set the new width as a percentage
     for (var i = 0; i < pizzas.length; i++) {
       pizzas[i].style.width = newWidth + '%';
     }  
 ```  
+
+Full code for `changePizzaSizes()` function is as follows:
+```sh
+  // Iterates through pizza elements on the page and changes their widths
+  function changePizzaSizes(size) {
+
+    // Get all pizza elements
+    var pizzas = document.querySelectorAll(".randomPizzaContainer"),
+        newWidth;
+
+    if (pizzas.length) {
+      // Get the new width percentage
+      switch(size) {
+        case "1":
+          newWidth = 25;
+          break;
+        case "2":
+          newWidth = 33.3;
+          break;
+        case "3":
+          newWidth =  50;
+          break;
+        default:
+          console.log("Invalid size: " + size + ". Using default instead.");
+          newWidth = 33.3;
+      }
+
+      // iterate through each pizza element and set the new width as a percentage
+      for (var i = 0; i < pizzas.length; i++) {
+        pizzas[i].style.width = newWidth + '%';
+      }
+    }
+  }
+```
+
